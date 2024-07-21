@@ -21,7 +21,7 @@ exports.register = (req, res, next) => {
         // Broadcast created user profile to users.
         sendNewUser(user);
     })
-    .catch(next);
+    .catch(next); // اذا حصل خطأ ما سيتم تمريره الى وسيط في نظام Express مدمج مخصص لمعالجة الاخطاء وارسالها للمستخدم
 };
 
 
