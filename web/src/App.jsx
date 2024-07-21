@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Chat, NotFound } from './views';
+import { Register, Chat, NotFound } from './views';
 
 function App() {
   return (
@@ -8,6 +8,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

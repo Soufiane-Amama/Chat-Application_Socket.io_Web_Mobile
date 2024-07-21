@@ -28,6 +28,25 @@ const ModelSchema = new mongoose.Schema({
 });
 
 
+// Get user profile data.
+ModelSchema.methods.getData = function(){
+    return {
+        id: this._id,
+        name: this.name,
+        username: this.username,
+        about: this.about,
+        avatar: this.avatar
+    };
+};
+
+// Create Token - Generate user token with profile data.
+ModelSchema.methods.signJwt = function(){
+    let data = this.getData();
+    data.token = jwt.sign(data, process.env.JWT_SECRET);
+    return data;
+};
+
+
 // Append id attribute.
 ModelSchema.virtual('id').get(function(){
     return this._id.toHexString();
