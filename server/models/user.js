@@ -46,6 +46,10 @@ ModelSchema.methods.signJwt = function(){
     return data;
 };
 
+// Check if given password is correct.
+ModelSchema.methods.checkPassword = function (password) {
+	return this.password === password;
+}
 
 // Append id attribute.
 ModelSchema.virtual('id').get(function(){

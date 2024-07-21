@@ -23,3 +23,20 @@ exports.register = (req, res, next) => {
     })
     .catch(next);
 };
+
+
+// Login User
+exports.login = (req, res, next) => {
+    const { username, password } = req.body;
+    
+    // Find user by username.
+    User.findOne({username}).then(user => {
+        // if user not found or password is wrong then create error.
+        if(!user || !user.checkPassword(password)){
+            throw createError(401, 'الرجاء التحقق من اسم المستخدم وكلمة المرور');
+        }
+        // Generate user token.
+        res.json(user.signJwt());
+    })
+    .catch(next);
+};
