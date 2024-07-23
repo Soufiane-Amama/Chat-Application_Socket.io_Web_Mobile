@@ -46,9 +46,17 @@ ModelSchema.methods.signJwt = function(){
     return data;
 };
 
+// Pre save middleware (before save user document). - هذه الدالة للتحقق من شروط التشفير وتشفير كلمة المرور وهي جزء من نموذج المستخدم الذي يتعامل مع تجزئة كلمة المرور قبل حفظها
+ModelSchema.pre('save', function(next) { // لدينا pre تعني يستخدم هذا لتعريف دالة يتم تنفيذها قبل عملية الحفظ  في قاعدة البيانات، ثم لدينا save، و هو الحدث الذي نريد أن نربط به هذه الدالة، في هذه الحالة هو حدث الحفظ. و next هي دالة رد اتصال يجب استدعاؤها للإشارة إلى اكتمال الخطاف، next() هي بمثابة إشارة للشخص الذي أمامك في الطابور، تخبره أنك انتهيت من دورك وأنه يمكنه التقدم.   
+    if(this.isNew || this.isModified('password')){ // هنا نتحقق من شرطين this.isNew إن كان المستخدم جديدًا (أي أنه مستخدم جديد) و this.isModified('password') هل تم تعديل كلمة المرور (أي أن المستخدم يقوم بتحديث كلمته المرور). ولو تحقق أيًا من تلك الشروط، فسيتم تنفيذ الكود الموجود داخل if 
+        this.password = bcrypt.hashSync(this.password, 8); // تجزءة كلمة المرور 
+    }
+    next(); // يتم استدعاء next() لإخبار Mongoose بالانتقال إلى الخطوة التالية وإتمام عملية الحفظ في قاعدة البيانات.
+ });
+
 // Check if given password is correct.
 ModelSchema.methods.checkPassword = function (password) {
-	return this.password === password;
+	return bcrypt.compareSync(password, this.password); // مقارنة كلمة المرور المدخلة اذا هي متطابقة مع المخزنة او لا 
 }
 
 // Append id attribute.
