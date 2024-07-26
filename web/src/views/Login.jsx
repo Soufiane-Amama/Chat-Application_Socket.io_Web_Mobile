@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Card, Form, Input, Button } from 'reactstrap'; // مكتبة مكونات واجهة مستخدم تعتمد على React و Bootstrap
 import Error from 'components/Error';
 import Logo from 'assets/logo.png';
@@ -12,7 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const navigate = useNavigate();
+  const history = useHistory();
 
 
  // Change form handler
@@ -34,7 +34,7 @@ const Login = () => {
     axios.post('/api/auth', data)
       .then((res) => {
         Auth.login(res.data);
-        navigate('/');
+        history.push('/');
       })
       .catch((err) => {
         setError(err.response.data.message);

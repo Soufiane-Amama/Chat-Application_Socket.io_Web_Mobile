@@ -1,27 +1,29 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Register, Chat, NotFound, Login } from './views';
+import { BrowserRouter as Router, Switch } from 'react-router-dom';
+import AppRoute from './AppRoute';
+import { Chat, NotFound, Register, Login } from './views';
 import Auth from './Auth';
 
-function App() {
 
-  useEffect(() => {
-    Auth.init();
-  }, [])
+const App = () => {
+    useEffect(() => {
+        Auth.init();
+    }, []);
 
-  return (
-    <div id="main-container" className="container-fluid">
-      <Router>
-        <Routes>
-          {/* <Route path="/" element={<Navigate to="/login" />} /> */}
-          <Route path="/" element={<Chat />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
-    </div>
-  );
+    return (
+        <div id="main-container" className="container-fluid">
+            <Router>
+                <Switch>
+                    <AppRoute path='/' exact component={Chat} can={Auth.auth} redirect='/login' />
+                    <AppRoute path='/register' component={Register} can={Auth.guest} redirect='/' />
+                    <AppRoute path='/login' component={Login} can={Auth.guest} redirect='/' />
+                    <AppRoute component={NotFound} />
+                </Switch>
+            </Router>
+        </div>
+    );
 }
 
 export default App;
+
+
