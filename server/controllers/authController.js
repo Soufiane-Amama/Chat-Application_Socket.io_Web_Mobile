@@ -40,3 +40,9 @@ exports.login = (req, res, next) => {
     })
     .catch(next);
 };
+
+// Broadcast created user profile to users. - اظهار اي مستخدم جديد قام بالتسجيل في الوقت الفعلي 
+const sendNewUser = (user) => {
+    let data = { name, username, avatar } = user;
+    io.emit('new_user', data);
+};
